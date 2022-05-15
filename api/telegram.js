@@ -3,9 +3,9 @@ const { getP2PData } = require('../api/binance');
 const { normalizeElements } = require('../utils/normalizeElements');
 const { POLLING_INTERVAL, BAKNK_BLACK_LIST, MAX_LIST_SIZE, ELEMENTS_PER_PAGE, TELEGRAM_TOKEN } = require('../utils/constants');
 
-const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: { interval: POLLING_INTERVAL } });
-
 const initiate = () => {
+    const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: { interval: POLLING_INTERVAL } });
+
     bot.on('message', async (msg) => {
         const chatId = msg.chat.id;
         const fristZalupa = await getP2PData();
@@ -26,11 +26,11 @@ const initiate = () => {
                 return accData;
             }, Promise.resolve(fristZalupa.data))
 
-            const elementsConfigSize = { short: { start: 0, end: MAX_LIST_SIZE } };
-            const normalizedElements = normalizeElements(elements, BAKNK_BLACK_LIST, elementsConfigSize)
+            if (elements) {
+                const elementsConfigSize = { start: 0, end: MAX_LIST_SIZE };
+                const normalizedElements = normalizeElements(elements, BAKNK_BLACK_LIST, elementsConfigSize, remapFn)
 
-            if (normalizedElements) {
-                normalizedElements.map(({ exchangePrice, bank }) => bot.sendMessage(chatId, `${exchangePrice} | ${bank}`))
+                bot.sendMessage(chatId, normalizedElements)
             }
         }
     })
