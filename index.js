@@ -3,21 +3,17 @@
 require('dotenv').config()
 const TelegramBot = require('node-telegram-bot-api');
 const { getP2PData } = require('./api/binance');
-const { normalizeElements, bankBlackList } = require('./utils/normalizeElements');
+const { normalizeElements } = require('./utils/normalizeElements');
+const { POLLING_INTERVAL, BAKNK_BLACK_LIST, MAX_LIST_SIZE, ELEMENTS_PER_PAGE, TELEGRAM_TOKEN } = require('./utils/constants');
 
-// replace the value below with the Telegram token you receive from @BotFather
-const token = process.env.TELEGRAM_TOKEN
-
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, { polling: { interval: 5000 } });
+const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: { interval: POLLING_INTERVAL } });
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
-    const shortener = 15;
     const fristZalupa = await getP2PData();
 
     if (fristZalupa && fristZalupa.success) {
-        const totalPages = Math.ceil((fristZalupa.total / 20));
+        const totalPages = Math.ceil((fristZalupa.total / ELEMENTS_PER_PAGE));
         const pages = new Array(totalPages - 1).fill(null);
         const elements = await pages.reduce(async (prev, _, idx) => {
             const accData = await prev;
@@ -32,8 +28,8 @@ bot.on('message', async (msg) => {
             return accData;
         }, Promise.resolve(fristZalupa.data))
 
-        const elementsConfigSize = { short: { start: 0, end: shortener } };
-        const normalizedElements = normalizeElements(elements, bankBlackList, elementsConfigSize)
+        const elementsConfigSize = { short: { start: 0, end: MAX_LIST_SIZE } };
+        const normalizedElements = normalizeElements(elements, BAKNK_BLACK_LIST, elementsConfigSize)
 
         if (normalizedElements) {
             normalizedElements.map(({ exchangePrice, bank }) => bot.sendMessage(chatId, `${exchangePrice} | ${bank}`))
