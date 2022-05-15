@@ -1,7 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
-const { getP2PData } = require('./api/binance');
-const { normalizeElements } = require('./utils/normalizeElements');
-const { POLLING_INTERVAL, BAKNK_BLACK_LIST, MAX_LIST_SIZE, ELEMENTS_PER_PAGE, TELEGRAM_TOKEN } = require('./utils/constants');
+const { getP2PData } = require('../api/binance');
+const { normalizeElements } = require('../utils/normalizeElements');
+const { POLLING_INTERVAL, BAKNK_BLACK_LIST, MAX_LIST_SIZE, ELEMENTS_PER_PAGE, TELEGRAM_TOKEN } = require('../utils/constants');
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: { interval: POLLING_INTERVAL } });
 
