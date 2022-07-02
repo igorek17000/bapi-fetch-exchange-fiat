@@ -1,9 +1,13 @@
-const https = require("https");
+const https = require('https');
 
 const host = 'p2p.binance.com'
 const search = `/bapi/c2c/v2/friendly/c2c/adv/search`
 
 const getP2PData = (page = 1, fiat = 'UAH', tradeType = 'BUY', asset = 'USDT', payTypes = []) => {
+    if (page >= 5) {
+        return
+    }
+
     return new Promise((resolve, reject) => {
         const obj = {
             page,
@@ -24,7 +28,7 @@ const getP2PData = (page = 1, fiat = 'UAH', tradeType = 'BUY', asset = 'USDT', p
             body: JSON.stringify(objToString)
         }
         const req = https.request(options, (res) => {
-            let output = "";
+            let output = '';
 
             res.on('data', d => {
                 output += d;
@@ -41,7 +45,7 @@ const getP2PData = (page = 1, fiat = 'UAH', tradeType = 'BUY', asset = 'USDT', p
         })
 
 
-        req.on("error", (error) => {
+        req.on('error', (error) => {
             reject(error);
         });
 
