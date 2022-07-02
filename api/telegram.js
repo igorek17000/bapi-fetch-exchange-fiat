@@ -74,11 +74,10 @@ const initiate = () => {
                             const fileStream = fs.createWriteStream('1.jpeg');
 
                             imageStream.pipe(fileStream)
-
-                            const buffer = fs.readFileSync('1.jpeg');
-                            bot.sendPhoto(chatId, buffer, {}, { filename: '1.jpeg' });
                         });
 
+                        const buffer = fs.readFileSync('1.jpeg');
+                        bot.sendPhoto(chatId, buffer, {}, { filename: '1.jpeg' });
                         bot.sendMessage(chatId, normalizedElements)
                     }
                 }
