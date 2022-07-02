@@ -75,12 +75,8 @@ const initiate = () => {
 
                             imageStream.pipe(fileStream)
 
-                            const inputMediaArrayOne = [{
-                                type: 'photo',
-                                media: fs.readFileSync('1.jpeg'),
-                            }]
-
-                            bot.sendMediaGroup(chatId, inputMediaArrayOne);
+                            const buffer = fs.readFileSync('1.jpeg');
+                            bot.sendPhoto(chatId, buffer, {}, { filename: '1.jpeg' });
                         });
 
                         bot.sendMessage(chatId, normalizedElements)
