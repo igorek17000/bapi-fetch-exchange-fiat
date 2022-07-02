@@ -11,6 +11,9 @@ const normalizeElements = (input, exclude = [], short = { start: 0, end: 0 }) =>
   .splice(short.start, short.end)
   .reduce((acc, item, index) => acc += `${index + 1} : ${item.bank}: ${item.exchangePrice} | $${item.quantity} => ${item.fiatSymbol}${item.amount}  \n`, '')
 
+const getValue = (input, exclude) => input.map(remapFn).filter(({ bank }) => !exclude.includes(bank)).map(price => price.exchangePrice)
+
 module.exports = {
-  normalizeElements
+  normalizeElements,
+  getValue
 }

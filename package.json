@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "plotly": "^1.0.6"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",
