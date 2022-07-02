@@ -11,13 +11,13 @@ const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 const sleep = time => new Promise(resolve => setTimeout(resolve, time))
 
 const imgOpts = {
-    format: 'png',
+    format: 'jpeg',
     width: 1000,
     height: 1000
 };
 
 const writeStream = fs.createWriteStream('data.txt');
-fs.createWriteStream('1.png')
+fs.createWriteStream('1.jpeg')
 
 const initiate = () => {
     bot.onText(/^\/start$/, async (msg) => {
@@ -71,15 +71,13 @@ const initiate = () => {
                         plotly.getImage(figure, imgOpts, function (error, imageStream) {
                             if (error) return console.log(error);
 
-                            const fileStream = fs.createWriteStream('1.png');
+                            const fileStream = fs.createWriteStream('1.jpeg');
 
                             imageStream.pipe(fileStream)
 
                             const inputMediaArrayOne = [{
                                 type: 'photo',
-                                media: fs.readFileSync('1.png'),
-                                caption: 'piska'
-        
+                                media: fs.readFileSync('1.jpeg'),
                             }]
 
                             bot.sendMediaGroup(chatId, inputMediaArrayOne);
